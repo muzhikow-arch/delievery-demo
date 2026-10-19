@@ -1,25 +1,22 @@
-require: slotfilling/slotFilling.sc
-  module = sys.zb-common
-
+require: import.sc
 
 theme: /
 
     state: Start
         q!: $regex</start>
-        a: Начнём.
+        script:
+            var id = getRandomInt(1, 2)
 
-    state: Hello
-        intent!: /привет
-        a: Привет привет
+            var client = _.find(clients, function(c) {
+                return c.id === id
+            })
 
-    state: Bye
-        intent!: /пока
-        a: Пока пока
+            var order = _.find(orders, function(o) {
+                return o.clientId === id
+            })
 
-    state: NoMatch
-        event!: noMatch
-        a: Я не понял. Вы сказали: {{$request.query}}
+            $client.fullName = client.fullName
+            $client.name = client.name
+            $client.phone = client.phone
 
-    state: Match
-        event!: match
-        a: {{$context.intent.answer}}
+            $session.product = client.product
